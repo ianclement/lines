@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+#  Copyright (c) 2024 Ian Clement.
+#
+#  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+#  License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+#  later version.
+#
+#  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+#  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along with this program. If not,
+#  see <https://www.gnu.org/licenses/>.
+
+
+re_number='^[0-9]+$'
+
+if [[ $# -gt 0 && ! $1 =~ $re_number ]]
+then
+    echo "A small bash utility for selecting an line and optionally running a command."
+    echo "Usage: lines [n [command]]" >&2
+    exit 1
+fi
+
+# by default we will output the selected result, unless another command is passed
+command="echo"
+if [[ $# -gt 1 ]]
+then
+    command=$2
+fi
+
+if [[ $# -eq 0 ]]
+then
+    nl </dev/stdin
+    
+else
+    $command "$(head -n $1 </dev/stdin | tail -n 1)"
+fi
+
+exit 0
+
+
